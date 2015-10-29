@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<title>SVG Animation with Snap</title>
+<link href="style/style.css" rel="stylesheet" type="text/css" />
+
+<body>
+
+<script src="scripts/jquery-2.1.4.min.js"></script>
+<script src="scripts/snap.svg-min.js"></script>
+
+<div id="wrapper">
+  <div class="container">
+    <h1>SVG Animation with Snap</h1>
+
+    <div class="slide" id="snippet-1">
+      <div class="inner">
+        <h2 >Snippet: Create an element</h2>
+        <svg viewbox="0 0 300 300"></svg>        
+      </div>
+
+      <script type="text/javascript">
+        $(document).ready(function() {
+
+          function createSquare(){
+            var none = Snap('#snippet-1 svg');
+
+            // DRAW RECTANGLE
+            var rect1 = none.rect(3, 3, 200, 200); // origin X, origin Y, width, height
+            rect1.attr({
+              fill: '#00a99d'
+            });
+
+            // ATTACH CLICK EVENT
+            rect1.click(function(){
+
+              // CHANGE ATTRIBUTE
+              // this.attr({
+              //   fill: '#fff',
+              //   stroke: '#ccaddb',
+              //   strokeWidth: 3,
+              //   'stroke-dasharray': '3, 7' // dash height, space between dashes
+              // });
+
+              // ANIMATE ATTRIBUTE CHANGE
+              this.animate({
+               fill: '#f5f5f5',
+               stroke: '#222',
+               strokeWidth: 3,
+              }, 1000, mina.linear)
+
+            });
+
+
+          }
+
+          createSquare();
+
+        });
+      </script>
+    </div>
+
+    
+  
+
+
+  <div class="slide" id="snippet-2">
+      <h2 >Snippet: Existing SVGs and fancy fills</h2>
+        <svg version="1.1" id="example-2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+   width="49.248px" height="49.247px" viewBox="0 0 49.248 49.247" enable-background="new 0 0 49.248 49.247" xml:space="preserve">
+      <path fill="#6D6E71" d="M24.624,0C11.024,0,0,11.024,0,24.625c0,13.6,11.024,24.622,24.624,24.622s24.624-11.022,24.624-24.622
+        C49.248,11.024,38.223,0,24.624,0z M38.071,18.491c0.012,0.275,0.019,0.552,0.019,0.83c0,8.486-6.459,18.271-18.271,18.271
+        c-3.626,0-7.002-1.062-9.844-2.885c0.502,0.061,1.013,0.09,1.532,0.09c3.009,0,5.777-1.025,7.976-2.748
+        c-2.81-0.053-5.182-1.908-5.999-4.459c0.392,0.074,0.794,0.112,1.208,0.112c0.586,0,1.153-0.075,1.692-0.225
+        c-2.938-0.588-5.151-3.184-5.151-6.295c0-0.029,0-0.057,0-0.082c0.866,0.48,1.856,0.771,2.909,0.803
+        c-1.723-1.151-2.857-3.116-2.857-5.344c0-1.178,0.317-2.281,0.869-3.229c3.167,3.885,7.899,6.44,13.236,6.709
+        c-0.109-0.472-0.166-0.962-0.166-1.464c0-3.547,2.875-6.422,6.422-6.422c1.847,0,3.515,0.779,4.687,2.027
+        c1.463-0.287,2.837-0.822,4.078-1.557c-0.479,1.498-1.498,2.758-2.823,3.551c1.299-0.154,2.536-0.498,3.688-1.01
+        C40.414,16.454,39.325,17.584,38.071,18.491z"/>
+      </svg>
+    </div>
+
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var twitterSVG = Snap('#snippet-2 svg');
+        var twitter = twitterSVG.select('path');
+        
+        // MAKE IT BIGGER
+        twitterSVG.attr({
+          width: 300,
+          height: 300,
+          cx: 75,
+          cy: 75
+        });
+
+        // CREATE A GRADIENT
+        var gradient = twitterSVG.gradient("l(0, 0, 1, 1)#ccaddb-#00a99d-#addbc1");
+        var circ = twitter.getBBox().width;
+        var radius = circ/2;
+        var center = radius;
+
+        // FILL THE TWITTER PATH WITH THE GRADIENT
+        twitter.attr({
+          fill: gradient
+        });
+
+        // ATTACH A HOVER EVENT TO THE SVG ELEMENT (NOT THE PATH)
+        twitterSVG.hover(function(){
+          animIn();
+        }, function(){
+          animOut();
+        })
+
+        function animIn() {
+          twitter.animate({
+            transform: 'rotate(360, 24.6127, 24.6127)' 
+            //transform: 'translate(24.6127, 24.6127)'
+            //transform: 'scale(2, 0, 24.6127, 24.6127)'
+            //transform: 'skewX(20)'
+            //transform: 'skewY(20)'
+          },750, mina.easeInOut)
+        };
+
+        function animOut() {
+          twitter.animate({
+            transform: 'rotate(0, 24.6127, 24.6127)'
+          },750, mina.easeInOut)
+        };
+
+      });
+    </script>
+  </div>
+
+
+
+
+
+
+  
+
+  <div class="container hide">
+
+    <p></p>
+
+    <div class="divider"></div>
+    <p><strong>Resources:</strong></p>
+    <ul>
+      <li><a href="http://moxieusa.com/Blog/2015/March/Top%2010%20Reasons%20Why%20SVG%20Is%20the%20New%20Flash.aspx">Why SVG is awesome</a> | Andy Makely</li>
+      <li><a href="http://jake.ly/journal/animations.html">Animation best practices</a> | Jake Blakely</li>
+      <li><a href="https://www.google.com/design/spec/animation/authentic-motion.html">Authentic motion</a> | Google</li>
+      <li><a href="http://sarasoueidan.com/demos/interactive-svg-coordinate-system/index.html">Interactive SVG Coordinate System</a> | Sara Soueidan</li>
+      <li><a href="http://svg.dabbles.info/">SVG Dabbles</a> | @ianscoding</li>
+    </ul>
+  </div>
+
+</div>
+
+
+
+</body>
+</html>
