@@ -6,7 +6,7 @@
 
 <body>
 
-<script src="scripts/jquery-2.1.4.min.js"></script>
+<script src="scripts/ready.min.js"></script>
 <script src="scripts/snap.svg-min.js"></script>
 
 <div id="wrapper">
@@ -20,21 +20,21 @@
       </div>
 
       <script type="text/javascript">
-        $(document).ready(function() {
+        docReady(function(){
 
           function createSquare(){
             var none = Snap('#snippet-1 svg');
 
-            // DRAW RECTANGLE
+            // //DRAW RECTANGLE
             var rect1 = none.rect(3, 3, 200, 200); // origin X, origin Y, width, height
             rect1.attr({
               fill: '#00a99d'
             });
 
-            // ATTACH CLICK EVENT
+            // //ATTACH CLICK EVENT
             rect1.click(function(){
 
-              // CHANGE ATTRIBUTE
+              // //CHANGE ATTRIBUTE
               // this.attr({
               //   fill: '#fff',
               //   stroke: '#ccaddb',
@@ -81,11 +81,11 @@
     </div>
 
     <script type="text/javascript">
-      $(document).ready(function() {
+      docReady(function(){
         var twitterSVG = Snap('#snippet-2 svg');
         var twitter = twitterSVG.select('path');
         
-        // MAKE IT BIGGER
+        // //MAKE IT BIGGER
         twitterSVG.attr({
           width: 300,
           height: 300,
@@ -93,18 +93,18 @@
           cy: 75
         });
 
-        // CREATE A GRADIENT
+        // //CREATE A GRADIENT
         var gradient = twitterSVG.gradient("l(0, 0, 1, 1)#ccaddb-#00a99d-#addbc1");
         var circ = twitter.getBBox().width;
         var radius = circ/2;
         var center = radius;
 
-        // FILL THE TWITTER PATH WITH THE GRADIENT
+        // //FILL THE TWITTER PATH WITH THE GRADIENT
         twitter.attr({
           fill: gradient
         });
 
-        // ATTACH A HOVER EVENT TO THE SVG ELEMENT (NOT THE PATH)
+        // //ATTACH A HOVER EVENT TO THE SVG ELEMENT (NOT THE PATH)
         twitterSVG.hover(function(){
           animIn();
         }, function(){
@@ -128,6 +128,149 @@
         };
 
       });
+    </script>
+  </div>
+
+  <div class="slide" id="snippet-3">
+      <h2 >Snippet 3</h2>
+      <svg id="world" width="100%" viewBox="126 175.2 863.2 442.8"></svg>
+    </div>
+
+    <script type="text/javascript">
+      var data = [
+        {
+          "location": "New York City",
+          "startDate": "09-19-2015",
+          "endDate": "09-20-2015",
+          "from": "San Francisco",
+          "to": "Los Angeles"
+        },
+        {
+          "location": "Boston",
+          "startDate": "09-19-2015",
+          "endDate": "09-20-2015",
+          "from": "Los Angeles",
+          "to": "San Francisco"
+        }
+      ];
+
+      var locations = [
+        {
+          "location": "Los Angeles",
+          "x": 140,
+          "y": 132
+        },      
+        {
+          "location": "New York City",
+          "x": 244,
+          "y": 114
+        },
+        {
+          "location": "San Francisco",
+          "x": 135,
+          "y": 120
+        },
+        {
+            "location": "Boston",
+            "x": 252,
+            "y": 110
+        }
+      ];
+
+      docReady(function(){
+        Snap.load('media/BlankMap-World6.svg', function ( loadedFragment ) {
+            onSVGLoaded(loadedFragment);
+        });
+        s = Snap('#world');
+      });
+
+      function onSVGLoaded( data ){ 
+        s.append( data );
+        g = s.g();
+
+        var map = Snap('#world6'),
+            bb = map.getBBox(),
+            vb = map.attr('viewBox');
+        g.add(map);
+        //s.attr('viewBox', vb);
+
+        g.attr({
+          'transform': 'matrix(1,0,0,1,' + vb.x + ',' + vb.y + ')'
+        });
+
+
+        changeColors();
+        addLocations();
+      }
+
+      function changeColors(){
+        var land = g.selectAll('.st0, .st1, .st2, .st3').attr({
+          fill: '#cccccc'
+        })
+      }
+
+      function addLocations(){
+        var startX, startY, destX, destY, endX, endY;
+
+        for (var i=0; i<locations.length; i++){
+
+          // look for the entry with a matching starting `location` value
+          if (locations[i].location == data[0].from){
+            startX = locations[i].x;
+            startY = locations[i].y;
+          }
+
+          // look for the entry with a matching destination `location` value
+          if (locations[i].location == data[0].location){
+            destX = locations[i].x;
+            destY = locations[i].y;
+          }
+
+          // look for the entry with a matching ending `location` value
+          if (locations[i].location == data[0].to){
+            endX = locations[i].x;
+            endY = locations[i].y;
+          }
+
+        }
+
+        var star = g.path('M 0.000 15.000,L 23.511 32.361,L 14.266 4.635,L 38.042 -12.361,L 8.817 -12.135,L 0.000 -40.000,L -8.817 -12.135,L -38.042 -12.361,L -14.266 4.635,L -23.511 32.361,L 0.000 15.000');
+
+        var startMatrix = new Snap.Matrix();
+
+        startMatrix.translate(startX, startY);
+        startMatrix.scale(.25, .25);
+
+        star.attr({
+          transform: startMatrix,
+          class: 'event',
+          fill: '#00a99d'
+        });
+
+        var destMatrix = new Snap.Matrix(),
+            endMatrix = new Snap.Matrix();
+
+        destMatrix.translate(destX, destY);
+        destMatrix.scale(.25, .25);
+
+        endMatrix.translate(endX, endY);
+        endMatrix.scale(.25, .25);
+
+        // move star to the destination position
+        star.animate({
+          transform: destMatrix
+        }, 1000, mina.easeinout, function(){
+
+          setTimeout(function(){
+            // move star to the end position
+            star.animate({
+              transform: endMatrix
+            }, 1000, mina.easeinout);
+          }, 500); //time between arriving and leaving destination
+
+        });
+
+      }
     </script>
   </div>
 
